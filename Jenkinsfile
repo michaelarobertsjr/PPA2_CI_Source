@@ -11,7 +11,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py_compile sources/ppa2src.py' 
+                sh 'python ppa2src.py' 
             }
         }
          stage('Test') {
@@ -21,12 +21,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'py.test --verbose --junit-xml test-reports/results.xml sources/ppa2_test.py'
-            }
-            post {
-                always {
-                    junit 'test-reports/results.xml'
-                }
+                sh 'pytest -v ppa2_test.py'
             }
         }
     }
