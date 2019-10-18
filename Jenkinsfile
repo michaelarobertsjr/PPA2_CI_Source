@@ -21,7 +21,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'pytest -v ppa2_test.py'
+                sh 'py.test -v ppa2_test.py'
             }
         }
     }
