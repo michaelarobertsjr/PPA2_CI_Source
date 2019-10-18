@@ -17,11 +17,11 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'qnib/pytest'
+                    image 'pcp1976/pytest-3.7'
                 }
             }
             steps {
-                sh 'python3.7.4 -m pytest -v ppa2_test.py'
+                sh 'pytest -v ppa2_test.py'
             }
         }
     }
