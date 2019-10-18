@@ -18,10 +18,11 @@ pipeline {
             agent {
                 docker {
                     image 'qnib/pytest'
+                    image 'python:3.7.4-alpine'
                 }
             }
             steps {
-                sh 'py.test-3.7.4 -v ppa2_test.py'
+                sh 'python -m py.test -v ppa2_test.py'
             }
         }
     }
