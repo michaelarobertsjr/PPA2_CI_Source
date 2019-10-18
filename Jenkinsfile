@@ -21,7 +21,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python3.7 -m pytest -v ppa2_test.py'
+                sh 'python3.7.4 -m pytest -v ppa2_test.py'
             }
         }
     }
