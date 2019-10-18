@@ -14,14 +14,14 @@ pipeline {
                 sh 'python -m py_compile ppa2src.py' 
             }
         }
-         stage('Test') {
+        stage('Test') {
             agent {
                 docker {
                     image 'qnib/pytest'
                 }
             }
             steps {
-                sh 'py.test -v ppa2_test.py'
+                sh 'python -m py.test -v ppa2_test.py'
             }
         }
     }
