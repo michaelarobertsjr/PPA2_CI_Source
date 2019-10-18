@@ -22,7 +22,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python -m py.test -v ppa2_test.py'
+                sh 'python -m pytest -v ppa2_test.py'
             }
         }
     }
