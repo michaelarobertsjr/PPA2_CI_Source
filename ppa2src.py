@@ -29,13 +29,13 @@ def calcBMI(ht, wt):
 
     stats = 'Value: ' + str(bmi) + ' Category: '
 
-    if(bmi <= 18.5):
+    if bmi <= 18.5:
         stats += 'Underweight\n'
-    elif(bmi > 18.5 and bmi <= 24.9):
+    elif bmi > 18.5 and bmi <= 24.9:
         stats += 'Normal Weight\n'
-    elif(bmi > 24.9 and bmi <= 29.9):
+    elif bmi > 24.9 and bmi <= 29.9:
         stats += 'Overweight\n'
-    elif(bmi >= 29.9):
+    elif bmi >= 29.9:
         stats += 'Obese\n'
 
     return stats
@@ -56,7 +56,7 @@ def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
     yearsNeeded = int(float(goalSave) / (float(currentSalary) * float(percentSave) * 0.01 * 1.35))
     retirementAge = int(currentAge) + int(yearsNeeded)
 
-    if(retirementAge < 100):
+    if retirementAge < 100:
         return 'Your savings goal will be met at age ' + str(retirementAge)
     else:
         return 'Unortunately, your savings goal was too ambitious'
@@ -96,17 +96,17 @@ def verifyEmail(address):
 
     temp = 'valid!'
     count = 0
-    if(address[0] == '.' or address[len(address) - 1] == '.'):
+    if address[0] == '.' or address[len(address) - 1] == '.':
         temp = 'invalid'
-    elif('..' in address):
+    elif '..' in address:
         temp =  'invalid'
     else:
         for char in address:
-            if(char in illegalCharacters):
+            if char in illegalCharacters:
                 temp = 'invalid'
-            if(char == '@'):
+            if char == '@':
                 count += 1
-    if(count != 1):
+    if count != 1:
         temp = 'invalid'
     validation += temp
 
@@ -115,7 +115,7 @@ def verifyEmail(address):
 #Main loop that handles the function menu and program exit
 def start():
     condition = True
-    while(condition):
+    while condition:
 
         available = ['1', '2', '3', '4', '5']
 
@@ -129,8 +129,8 @@ def start():
             5. Exit
 
             ''')  
-        if(choice in available):
-            if(choice == '5'):
+        if choice in available:
+            if choice == '5':
                 condition = False
             else:
                 chooseFunction(choice)

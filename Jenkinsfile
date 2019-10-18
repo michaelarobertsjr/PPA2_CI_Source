@@ -11,7 +11,7 @@ pipeline {
                 }
             }
             steps {
-                sh 'python ppa2src.py' 
+                sh 'python -m py_compile ppa2src.py' 
             }
         }
          stage('Test') {
