@@ -22,6 +22,7 @@ pipeline {
             }
             steps {
                 sh 'pip install sqlalchemy'
+                sh 'pip install pymysql'
                 sh 'pytest -v ppa2_test.py'
             }
         }
