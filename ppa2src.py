@@ -143,8 +143,8 @@ if __name__ == '__main__':
         db_config = {
             'host' : 'localhost',
             'port' : '32769',
-            'user' : 'michael',
-            'pass' : 'ppa2pass',
+            'user' : 'root',
+            'pass' : 'roots',
             'db' : 'ppa2_values'
         }
 
