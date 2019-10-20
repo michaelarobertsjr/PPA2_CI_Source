@@ -49,6 +49,18 @@ def calcBMI(ht, wt):
     return stats
 
 def saveBmi(h, w, s):
+    db_config = {
+            'host' : '192.168.99.100',
+            'port' : '32769',
+            'user' : 'root',
+            'pass' : 'roots',
+            'db' : 'ppa2_values'
+        }
+
+    access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
+    engine = db.create_engine(access_str, pool_pre_ping=True)
+    conn = engine.connect()
+    
     save_string = 'INSERT INTO bmi VALUES (\'' + str(h) + '\', ' + w + ', \'' + str(s) + '\', \'' + str(datetime.datetime.now()) + '\')'
     conn.execute(save_string)
 
@@ -100,6 +112,18 @@ def calcDistance(xOne, yOne, xTwo, yTwo):
     return 'Distance: ' + str(distance) + '\n'
 
 def saveDistance(ax, ay, bx, by, d):
+    db_config = {
+            'host' : '192.168.99.100',
+            'port' : '32769',
+            'user' : 'root',
+            'pass' : 'roots',
+            'db' : 'ppa2_values'
+        }
+
+    access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
+    engine = db.create_engine(access_str, pool_pre_ping=True)
+    conn = engine.connect()
+
     save_string = 'INSERT INTO distance VALUES(\'' + str(ax) + '\', \'' + str(ay) + '\', \'' + str(bx) + '\', \'' + str(by) + '\', ' + str(d) + ', \'' + str(datetime.datetime.now()) + '\')'
     conn.execute(save_string)
 
