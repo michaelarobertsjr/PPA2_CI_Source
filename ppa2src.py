@@ -1,4 +1,4 @@
-import math
+import math, datetime
 import sqlalchemy as db
 
 #Switch connecting the function menu to the internal functions
@@ -12,6 +12,11 @@ def chooseFunction(x):
 
 #BMI Categorizer I/O
 def getBMI():
+
+    bmi_values = conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+    print(outA)
+    for n in bmi_values:
+        print(str(n) + '\n')
 
     height_sep = input('Please enter your height in feet and inches separated by a space (e.g. 5 7 for 5 feet 7 inches)\n')
 
@@ -31,14 +36,16 @@ def calcBMI(ht, wt):
     stats = 'Value: ' + str(bmi) + ' Category: '
 
     if bmi <= 18.5:
-        stats += 'Underweight\n'
+        stats += 'Underweight'
     elif bmi > 18.5 and bmi <= 24.9:
-        stats += 'Normal Weight\n'
+        stats += 'Normal Weight'
     elif bmi > 24.9 and bmi <= 29.9:
-        stats += 'Overweight\n'
+        stats += 'Overweight'
     elif bmi >= 29.9:
-        stats += 'Obese\n'
+        stats += 'Obese'
 
+    conn.execute('INSERT INTO bmi VALUES (\'' + str(ht) + '\', ' + wt + ', \'' + str(stats) + '\', \'' + str(datetime.datetime.now()) + '\');')
+    stats += '\n'
     return stats
 
 #Retirement Estimator I/O
@@ -65,6 +72,11 @@ def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
 #Distance Calculator I/O
 def getDistance():
 
+    distance_values = conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+    print(outB)
+    for m in distance_values:
+        print(str(m) + '\n')
+
     x1 = input('Please enter the x coordinate for the first point\n')
     y1 = input('Please enter the y coordinate for the first point\n')
     x2 = input('Please enter the x coordinate for the second point\n')
@@ -79,7 +91,9 @@ def calcDistance(xOne, yOne, xTwo, yTwo):
     sum2 = (float(yTwo) - float(yOne))**2
 
     distance = math.sqrt(sum1 + sum2)
-    return 'Distance: ' + str(distance)
+
+    conn.execute('INSERT INTO distance VALUES(\'' + str(xOne) + '\', \'' + str(yOne) + '\', \'' + str(xTwo) + '\', \'' + str(yTwo) + '\', ' + str(distance) + ', \'' + str(datetime.datetime.now()) + '\');')
+    return 'Distance: ' + str(distance) + '\n'
 
 
 #Email Verifier I/O
@@ -152,9 +166,20 @@ if __name__ == '__main__':
         engine = db.create_engine(access_str, pool_pre_ping=True)
         conn = engine.connect()
 
-        c = conn.execute('SELECT input_height FROM bmi WHERE input_weight=175')
-        out = c.fetchall()
-        print(out)
+        a = conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+        b = conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+        outA = 'BMI:\ninput_height, input_weight, output_stats, timestamp\n'
+        outB = 'Distance:\ninput_x1, input_y1, input_x2, input_y2, output_distance, timestamp\n'
+
+        print('Values after Last Program Execution:\n')
+        print(outA)
+        for entry in a:
+            print(str(entry) + '\n')
+        print(outB)
+        for item in b:
+            print(str(item) + '\n')
+
         start()
+
     except EOFError as error:
         print(error)   
