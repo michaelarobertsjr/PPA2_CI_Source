@@ -1,4 +1,5 @@
 import math
+import sqlalchemy as db
 
 #Switch connecting the function menu to the internal functions
 def chooseFunction(x):
@@ -137,5 +138,26 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
-        
+    try:
+        #Database Connection
+        db_config = {
+            'host' : 'http://192.168.99.100:',
+            'port' : '3306',
+            'user' : 'michael',
+            'pass' : 'ppa2pass',
+            'db' : 'ppa2_values'
+        }
+
+        access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], db_config['host'], db_config['port'], db_config['db'])
+        engine = db.create_engine(access_str)
+        conn = engine.connect()
+
+        metadata = db.MetaData(bind=engine)
+        metadata.reflect(only=['bmi'])
+        test_table = metadata.tables['bmi']
+
+        print(test_table)
+
+        start()
+    except EOFError as error:
+        print(error)   
