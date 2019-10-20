@@ -1,5 +1,6 @@
 import math, datetime
 import sqlalchemy as db
+import pymysql
 
 #Switch connecting the function menu to the internal functions
 def chooseFunction(x):
