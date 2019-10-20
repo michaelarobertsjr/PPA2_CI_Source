@@ -142,9 +142,9 @@ if __name__ == '__main__':
         #Database Connection
         db_config = {
             'host' : 'localhost',
-            'port' : '32769',
-            'user' : 'root',
-            'pass' : 'roots',
+            'port' : '3306',
+            'user' : 'michael',
+            'pass' : 'ppa2pass',
             'db' : 'ppa2_values'
         }
 
