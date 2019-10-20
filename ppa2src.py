@@ -44,9 +44,13 @@ def calcBMI(ht, wt):
     elif bmi >= 29.9:
         stats += 'Obese'
 
-    conn.execute('INSERT INTO bmi VALUES (\'' + str(ht) + '\', ' + wt + ', \'' + str(stats) + '\', \'' + str(datetime.datetime.now()) + '\');')
+    saveBmi(ht, wt, stats)
     stats += '\n'
     return stats
+
+def saveBmi(h, w, s):
+    save_string = 'INSERT INTO bmi VALUES (\'' + str(h) + '\', ' + w + ', \'' + str(s) + '\', \'' + str(datetime.datetime.now()) + '\')'
+    conn.execute(save_string)
 
 #Retirement Estimator I/O
 def getRetirement():
@@ -92,9 +96,12 @@ def calcDistance(xOne, yOne, xTwo, yTwo):
 
     distance = math.sqrt(sum1 + sum2)
 
-    conn.execute('INSERT INTO distance VALUES(\'' + str(xOne) + '\', \'' + str(yOne) + '\', \'' + str(xTwo) + '\', \'' + str(yTwo) + '\', ' + str(distance) + ', \'' + str(datetime.datetime.now()) + '\');')
+    saveDistance(xOne, yOne, xTwo, yTwo, distance)
     return 'Distance: ' + str(distance) + '\n'
 
+def saveDistance(ax, ay, bx, by, d):
+    save_string = 'INSERT INTO distance VALUES(\'' + str(ax) + '\', \'' + str(ay) + '\', \'' + str(bx) + '\', \'' + str(by) + '\', ' + str(d) + ', \'' + str(datetime.datetime.now()) + '\')'
+    conn.execute(save_string)
 
 #Email Verifier I/O
 def getEmail():
