@@ -141,14 +141,14 @@ if __name__ == '__main__':
     try:
         #Database Connection
         db_config = {
-            'host' : '192.168.99.100',
+            'host' : 'localhost',
             'port' : '3306',
-            'user' : 'root',
-            'pass' : 'roots',
+            'user' : 'michael',
+            'pass' : 'ppa2pass',
             'db' : 'ppa2_values'
         }
 
-        access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], db_config['host'], db_config['port'], db_config['db'])
+        access_str = 'mysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], db_config['host'], db_config['port'], db_config['db'])
         engine = db.create_engine(access_str)
         conn = engine.connect()
 
