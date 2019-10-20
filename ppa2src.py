@@ -141,7 +141,7 @@ if __name__ == '__main__':
     try:
         #Database Connection
         db_config = {
-            'host' : 'localhost',
+            'host' : '192.168.99.100',
             'port' : '3306',
             'user' : 'root',
             'pass' : 'roots',
