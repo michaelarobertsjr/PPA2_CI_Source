@@ -149,7 +149,7 @@ if __name__ == '__main__':
         }
 
         access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], db_config['host'], db_config['port'], db_config['db'])
-        engine = db.create_engine(access_str)
+        engine = db.create_engine(access_str, pool_pre_ping=True)
         conn = engine.connect()
 
         metadata = db.MetaData(bind=engine)
