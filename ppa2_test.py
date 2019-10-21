@@ -3,6 +3,17 @@ from pytest import *
 from _pytest.monkeypatch import MonkeyPatch
 import builtins
 
+class DummyResult:
+    
+    def fetchall(self):
+        return None
+
+class DummyConn:
+
+    def execute(self, input_string):
+        dum_res = DummyResult()
+        return dum_res
+
 def test_calcBMI():
 
     under = functions.calcBMI('5 8', '110')
@@ -57,21 +68,9 @@ def test_verifyEmail():
     twoAts = functions.verifyEmail('me@somewhere@there.com')
     assert twoAts.split()[4] == 'invalid'
 
-#Test using monkeypatching to mock input function
-class DummyResult:
-
-    def fetchall(self):
-        return None
-
-class DummyConn:
-
-    def execute(self, input_string):
-        dum_res = DummyResult()
-        return dum_res
-
 def test_getBMI():
 
-    def mock_input(x):
+    def mock_BMI_input(x):
         values = ['5 8', '180']
         if 'height' in x:
             return values[0]
@@ -79,8 +78,30 @@ def test_getBMI():
             return values[1]
 
     monkeypatch_one = MonkeyPatch()
-    monkeypatch_one.setattr(builtins, 'input', lambda x: mock_input(x))
+    monkeypatch_one.setattr(builtins, 'input', lambda x: mock_BMI_input(x))
 
-    dum_con = DummyConn()
+    dum_con_one = DummyConn()
     
-    assert functions.getBMI(dum_con) == 'Value: 28.02768166089965 Category: Overweight\n'
+    assert functions.getBMI(dum_con_one) == 'Value: 28.02768166089965 Category: Overweight\n'
+
+def test_getDistance():
+
+    def mock_Distance_input(x):
+        values = ['1','3','4','2']
+        if 'first' in x:
+            if 'x' in x:
+                return values[0]
+            elif 'y' in x:
+                return values[1]
+        elif 'second' in x:
+            if 'x' in x:
+                return values[2]
+            elif 'y' in x:
+                return values[3]
+
+    monkeypatch_two = MonkeyPatch()
+    monkeypatch_two.setattr(builtins, 'input', lambda x: mock_Distance_input(x))
+
+    dum_con_two = DummyConn()
+
+    assert functions.getDistance(dum_con_two) == 'Distance: 3.1622776601683795\n'
