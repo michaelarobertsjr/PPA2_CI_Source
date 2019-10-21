@@ -54,6 +54,3 @@ def test_verifyEmail():
 
     twoAts = functions.verifyEmail('me@somewhere@there.com')
     assert twoAts.split()[4] == 'invalid'
-
-def test_bmi_extended():
-
