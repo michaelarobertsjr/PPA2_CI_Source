@@ -1,5 +1,7 @@
 import ppa2src as functions
 from pytest import *
+from _pytest.monkeypatch import MonkeyPatch
+import builtins
 
 def test_calcBMI():
 
@@ -54,3 +56,31 @@ def test_verifyEmail():
 
     twoAts = functions.verifyEmail('me@somewhere@there.com')
     assert twoAts.split()[4] == 'invalid'
+
+#Test using monkeypatching to mock input function
+class DummyResult:
+
+    def fetchall(self):
+        return None
+
+class DummyConn:
+
+    def execute(self, input_string):
+        dum_res = DummyResult()
+        return dum_res
+
+def test_getBMI():
+
+    def mock_input(x):
+        values = ['5 8', '180']
+        if 'height' in x:
+            return values[0]
+        elif 'weight' in x:
+            return values[1]
+
+    monkeypatch_one = MonkeyPatch()
+    monkeypatch_one.setattr(builtins, 'input', lambda x: mock_input(x))
+
+    dum_con = DummyConn()
+    
+    assert functions.getBMI(dum_con) == 'Value: 28.02768166089965 Category: Overweight\n'

@@ -24,16 +24,26 @@ def chooseFunction(x, conn):
     myFunctions = {'1' : getBMI, '2' : getRetirement, '3' : getDistance, '4' : getEmail }
 
     chosenFunction = myFunctions.get(x, lambda : print('Please input a number 1 - 4 to use a function or 5 to exit...\n'))
-    chosenFunction(conn)
-        
+
+    if x == 1:
+
+        bmi_values = conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+        print('BMI:\ninput_height, input_weight, output_stats, timestamp\n')
+        for n in bmi_values:
+            print(str(n) + '\n')
+
+    elif x == 3:
+
+        distance_values = conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+        print('Distance:\ninput_x1, input_y1, input_x2, input_y2, output_distance, timestamp\n')
+        for m in distance_values:
+            print(str(m) + '\n')
+
+    output = chosenFunction(conn)
+    print(output)  
 
 #BMI Categorizer I/O
 def getBMI(db_conn):
-
-    bmi_values = db_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
-    print(outA)
-    for n in bmi_values:
-        print(str(n) + '\n')
 
     height_sep = input('Please enter your height in feet and inches separated by a space (e.g. 5 7 for 5 feet 7 inches)\n')
 
@@ -43,7 +53,7 @@ def getBMI(db_conn):
     save_string = 'INSERT INTO bmi VALUES (\'' + str(height_sep) + '\', ' + weight + ', \'' + str(result) + '\', \'' + str(datetime.datetime.now()) + '\')'
     db_conn.execute(save_string)
 
-    print(result)
+    return(result)
  
 #BMI Categorizer calculation
 def calcBMI(ht, wt):
@@ -76,7 +86,7 @@ def getRetirement(db_conn):
     saveRate = input('Please enter the percentage of your annual salary that you save yearly\n')
     saveGoal = input('Please enter your retirement savings goal\n')
 
-    print(calcRetirement(age, salary, saveRate, saveGoal))
+    return(calcRetirement(age, salary, saveRate, saveGoal))
 
 #Retirement Estimator calculation
 def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
@@ -92,11 +102,6 @@ def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
 #Distance Calculator I/O
 def getDistance(db_conn):
 
-    distance_values = db_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
-    print(outB)
-    for m in distance_values:
-        print(str(m) + '\n')
-
     x1 = input('Please enter the x coordinate for the first point\n')
     y1 = input('Please enter the y coordinate for the first point\n')
     x2 = input('Please enter the x coordinate for the second point\n')
@@ -106,7 +111,7 @@ def getDistance(db_conn):
     save_string = 'INSERT INTO distance VALUES(\'' + str(x1) + '\', \'' + str(y1) + '\', \'' + str(x2) + '\', \'' + str(y2) + '\', ' + str(result) + ', \'' + str(datetime.datetime.now()) + '\')'
     db_conn.execute(save_string)
 
-    print('Distance: ' + str(result) + '\n')
+    return('Distance: ' + str(result) + '\n')
 
 #Distance Calculator calculation
 def calcDistance(xOne, yOne, xTwo, yTwo):
@@ -123,7 +128,7 @@ def getEmail(db_conn):
 
     email = input('Please enter your email address\n')
 
-    print(verifyEmail(email))
+    return(verifyEmail(email))
 
 #Email Verifier calculation
 def verifyEmail(address):
@@ -181,14 +186,12 @@ if __name__ == '__main__':
 
         a = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
         b = initial_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
-        outA = 'BMI:\ninput_height, input_weight, output_stats, timestamp\n'
-        outB = 'Distance:\ninput_x1, input_y1, input_x2, input_y2, output_distance, timestamp\n'
 
         print('Values after Last Program Execution:\n')
-        print(outA)
+        print('BMI:\ninput_height, input_weight, output_stats, timestamp\n')
         for entry in a:
             print(str(entry) + '\n')
-        print(outB)
+        print('Distance:\ninput_x1, input_y1, input_x2, input_y2, output_distance, timestamp\n')
         for item in b:
             print(str(item) + '\n')
 
