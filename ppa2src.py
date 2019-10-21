@@ -169,6 +169,7 @@ def start(conn):
         if choice in available:
             if choice == '5':
                 condition = False
+                conn.close()
             else:
                 chooseFunction(choice, conn)
 
