@@ -30,10 +30,10 @@ def test_calcRetirement():
 def test_calcDistance():
 
     line1 = functions.calcDistance('1', '1', '5', '4')
-    assert float(line1.split()[1]) == approx(5.0)
+    assert line1 == approx(5.0)
 
     line2 = functions.calcDistance('20', '16', '56', '62')
-    assert float(line2.split()[1]) == approx(58.41232747)
+    assert line1 == approx(58.41232747)
 
 def test_verifyEmail():
 
@@ -54,3 +54,6 @@ def test_verifyEmail():
 
     twoAts = functions.verifyEmail('me@somewhere@there.com')
     assert twoAts.split()[4] == 'invalid'
+
+def test_bmi_extended():
+
