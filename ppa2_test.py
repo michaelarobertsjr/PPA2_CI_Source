@@ -33,7 +33,7 @@ def test_calcDistance():
     assert line1 == approx(5.0)
 
     line2 = functions.calcDistance('20', '16', '56', '62')
-    assert line1 == approx(58.41232747)
+    assert line2 == approx(58.41232747)
 
 def test_verifyEmail():
 
