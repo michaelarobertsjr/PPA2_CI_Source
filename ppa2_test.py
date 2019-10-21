@@ -1,7 +1,7 @@
 import ppa2src as functions
 from pytest import *
 
-def test_getBMI():
+def test_calcBMI():
 
     under = functions.calcBMI('5 8', '110')
     assert 'Underweight' in under
@@ -54,3 +54,6 @@ def test_verifyEmail():
 
     twoAts = functions.verifyEmail('me@somewhere@there.com')
     assert twoAts.split()[4] == 'invalid'
+
+def test_bmi_extended():
+
