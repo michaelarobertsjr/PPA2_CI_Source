@@ -2,6 +2,22 @@ import math, datetime
 import sqlalchemy as db
 import pymysql
 
+#Connect to ppa2_values database
+def connect_db():
+    db_config = {
+        'host' : '192.168.99.100',
+        'port' : '32769',
+        'user' : 'root',
+        'pass' : 'roots',
+        'db' : 'ppa2_values'
+    }
+
+    access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
+    engine = db.create_engine(access_str, pool_pre_ping=True)
+    conn = engine.connect()
+
+    return conn
+
 #Switch connecting the function menu to the internal functions
 def chooseFunction(x):
 
@@ -50,20 +66,10 @@ def calcBMI(ht, wt):
     return stats
 
 def saveBmi(h, w, s):
-    db_config = {
-            'host' : '192.168.99.100',
-            'port' : '32769',
-            'user' : 'root',
-            'pass' : 'roots',
-            'db' : 'ppa2_values'
-        }
-
-    access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
-    engine = db.create_engine(access_str, pool_pre_ping=True)
-    conn = engine.connect()
+    c = connect_db()
     
     save_string = 'INSERT INTO bmi VALUES (\'' + str(h) + '\', ' + w + ', \'' + str(s) + '\', \'' + str(datetime.datetime.now()) + '\')'
-    conn.execute(save_string)
+    c.execute(save_string)
 
 #Retirement Estimator I/O
 def getRetirement():
@@ -113,20 +119,10 @@ def calcDistance(xOne, yOne, xTwo, yTwo):
     return 'Distance: ' + str(distance) + '\n'
 
 def saveDistance(ax, ay, bx, by, d):
-    db_config = {
-            'host' : '192.168.99.100',
-            'port' : '32769',
-            'user' : 'root',
-            'pass' : 'roots',
-            'db' : 'ppa2_values'
-        }
-
-    access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
-    engine = db.create_engine(access_str, pool_pre_ping=True)
-    conn = engine.connect()
+    c = connect_db()
 
     save_string = 'INSERT INTO distance VALUES(\'' + str(ax) + '\', \'' + str(ay) + '\', \'' + str(bx) + '\', \'' + str(by) + '\', ' + str(d) + ', \'' + str(datetime.datetime.now()) + '\')'
-    conn.execute(save_string)
+    c.execute(save_string)
 
 #Email Verifier I/O
 def getEmail():
@@ -186,20 +182,10 @@ def start():
 if __name__ == '__main__':
     try:
         #Database Connection
-        db_config = {
-            'host' : '192.168.99.100',
-            'port' : '32769',
-            'user' : 'root',
-            'pass' : 'roots',
-            'db' : 'ppa2_values'
-        }
+        initial_conn = connect_db()
 
-        access_str = 'mysql+pymysql://%s:%s@%s:%s/%s' % (db_config['user'], db_config['pass'], '192.168.99.100', db_config['port'], db_config['db'])
-        engine = db.create_engine(access_str, pool_pre_ping=True)
-        conn = engine.connect()
-
-        a = conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
-        b = conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+        a = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+        b = initial_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
         outA = 'BMI:\ninput_height, input_weight, output_stats, timestamp\n'
         outB = 'Distance:\ninput_x1, input_y1, input_x2, input_y2, output_distance, timestamp\n'
 
