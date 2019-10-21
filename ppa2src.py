@@ -19,18 +19,18 @@ def connect_db():
     return conn
 
 #Switch connecting the function menu to the internal functions
-def chooseFunction(x):
+def chooseFunction(x, conn):
 
     myFunctions = {'1' : getBMI, '2' : getRetirement, '3' : getDistance, '4' : getEmail }
 
     chosenFunction = myFunctions.get(x, lambda : print('Please input a number 1 - 4 to use a function or 5 to exit...\n'))
-    chosenFunction()
+    chosenFunction(conn)
         
 
 #BMI Categorizer I/O
-def getBMI():
+def getBMI(db_conn):
 
-    bmi_values = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+    bmi_values = db_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
     print(outA)
     for n in bmi_values:
         print(str(n) + '\n')
@@ -39,7 +39,11 @@ def getBMI():
 
     weight = input('Please enter your weight in pounds\n')
 
-    print(calcBMI(height_sep, weight))
+    result = calcBMI(height_sep, weight)
+    save_string = 'INSERT INTO bmi VALUES (\'' + str(height_sep) + '\', ' + weight + ', \'' + str(result) + '\', \'' + str(datetime.datetime.now()) + '\')'
+    db_conn.execute(save_string)
+
+    print(result)
  
 #BMI Categorizer calculation
 def calcBMI(ht, wt):
@@ -61,18 +65,11 @@ def calcBMI(ht, wt):
     elif bmi >= 29.9:
         stats += 'Obese'
 
-    saveBmi(ht, wt, stats)
     stats += '\n'
     return stats
 
-def saveBmi(h, w, s):
-    c = connect_db()
-    
-    save_string = 'INSERT INTO bmi VALUES (\'' + str(h) + '\', ' + w + ', \'' + str(s) + '\', \'' + str(datetime.datetime.now()) + '\')'
-    c.execute(save_string)
-
 #Retirement Estimator I/O
-def getRetirement():
+def getRetirement(db_conn):
 
     age = input('Please enter your current age\n')
     salary = input('Please enter your current annual salary\n')
@@ -93,9 +90,9 @@ def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
         return 'Unortunately, your savings goal was too ambitious'
 
 #Distance Calculator I/O
-def getDistance():
+def getDistance(db_conn):
 
-    distance_values = initial_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+    distance_values = db_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
     print(outB)
     for m in distance_values:
         print(str(m) + '\n')
@@ -105,7 +102,11 @@ def getDistance():
     x2 = input('Please enter the x coordinate for the second point\n')
     y2 = input('Please enter the y coordinate for the second point\n')
 
-    print(calcDistance(x1, y1, x2, y2))
+    result = calcDistance(x1, y1, x2, y2)
+    save_string = 'INSERT INTO distance VALUES(\'' + str(x1) + '\', \'' + str(y1) + '\', \'' + str(x2) + '\', \'' + str(y2) + '\', ' + str(result) + ', \'' + str(datetime.datetime.now()) + '\')'
+    db_conn.execute(save_string)
+
+    print('Distance: ' + str(result) + '\n')
 
 #Distance Calculator calculation
 def calcDistance(xOne, yOne, xTwo, yTwo):
@@ -115,17 +116,10 @@ def calcDistance(xOne, yOne, xTwo, yTwo):
 
     distance = math.sqrt(sum1 + sum2)
 
-    saveDistance(xOne, yOne, xTwo, yTwo, distance)
-    return 'Distance: ' + str(distance) + '\n'
-
-def saveDistance(ax, ay, bx, by, d):
-    c = connect_db()
-
-    save_string = 'INSERT INTO distance VALUES(\'' + str(ax) + '\', \'' + str(ay) + '\', \'' + str(bx) + '\', \'' + str(by) + '\', ' + str(d) + ', \'' + str(datetime.datetime.now()) + '\')'
-    c.execute(save_string)
+    return distance
 
 #Email Verifier I/O
-def getEmail():
+def getEmail(db_conn):
 
     email = input('Please enter your email address\n')
 
@@ -156,7 +150,7 @@ def verifyEmail(address):
     return validation
 
 #Main loop that handles the function menu and program exit
-def start():
+def start(conn):
     condition = True
     while condition:
 
@@ -176,7 +170,7 @@ def start():
             if choice == '5':
                 condition = False
             else:
-                chooseFunction(choice)
+                chooseFunction(choice, conn)
 
 
 if __name__ == '__main__':
@@ -197,7 +191,7 @@ if __name__ == '__main__':
         for item in b:
             print(str(item) + '\n')
 
-        start()
+        start(initial_conn)
 
     except EOFError as error:
         print(error)   
