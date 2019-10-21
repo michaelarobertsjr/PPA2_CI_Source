@@ -30,7 +30,7 @@ def chooseFunction(x):
 #BMI Categorizer I/O
 def getBMI():
 
-    bmi_values = conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
+    bmi_values = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
     print(outA)
     for n in bmi_values:
         print(str(n) + '\n')
@@ -95,7 +95,7 @@ def calcRetirement(currentAge, currentSalary, percentSave, goalSave):
 #Distance Calculator I/O
 def getDistance():
 
-    distance_values = conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
+    distance_values = initial_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
     print(outB)
     for m in distance_values:
         print(str(m) + '\n')
