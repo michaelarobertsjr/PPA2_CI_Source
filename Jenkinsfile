@@ -24,7 +24,7 @@ pipeline {
                 sh 'python -m pip install --upgrade pip'
                 sh 'pip install sqlalchemy'
                 sh 'pip install pymysql'
-                sh '''pytest -v ppa2_test.py::test_calc_functions'''
+                sh '''pytest -v ppa2_test.py -k test_calc_functions'''
             }
         }
         stage('Tests Phase using dummy, mock Test Doubles') {
@@ -38,7 +38,7 @@ pipeline {
                 sh 'pip install sqlalchemy'
                 sh 'pip install pymysql'
                 sh 'pip install flask'
-                sh '''pytest -v ppa2_test.py::test_get_functions'''
+                sh '''pytest -v ppa2_test.py -k test_get_functions'''
             }
         }
     }
