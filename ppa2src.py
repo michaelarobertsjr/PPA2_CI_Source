@@ -1,6 +1,9 @@
 import math, datetime
 import sqlalchemy as db
 import pymysql
+import ppa2web
+import subprocess as sp
+from importlib import reload
 
 #Connect to ppa2_values database
 def connect_db():
@@ -180,10 +183,17 @@ def start(conn):
 
 
 if __name__ == '__main__':
+    #Database Connection
+    initial_conn = connect_db()
+    initial_conn.execute('CREATE TABLE IF NOT EXISTS bmi(input_height VARCHAR(10), input_weight INT, output_stats VARCHAR(50), time_run datetime)')
+    initial_conn.execute('CREATE TABLE IF NOT EXISTS distance(input_x1 INT, input_y1 INT, input_x2 INT, input_y2 INT, output_distance VARCHAR(50), time_run datetime)')
+
+    #Web Interface
+    reload(ppa2web)
+    web_server = sp.Popen('ppa2web.py', shell=True)
+    
     try:
         #Database Connection
-        initial_conn = connect_db()
-
         a = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
         b = initial_conn.execute('SELECT input_x1, input_y1, input_x2, input_y2, output_distance, timestamp FROM distance').fetchall()
 
@@ -196,6 +206,6 @@ if __name__ == '__main__':
             print(str(item) + '\n')
 
         start(initial_conn)
-
+        web_server.terminate()
     except EOFError as error:
         print(error)   

@@ -14,7 +14,7 @@ pipeline {
                 sh 'python -m py_compile ppa2src.py' 
             }
         }
-        stage('Test') {
+        stage('Tests Phase using no Test Doubles') {
             agent {
                 docker {
                     image 'pcp1976/pytest-3.7'
@@ -24,7 +24,20 @@ pipeline {
                 sh 'python -m pip install --upgrade pip'
                 sh 'pip install sqlalchemy'
                 sh 'pip install pymysql'
-                sh 'pytest -v ppa2_test.py'
+                sh '''pytest -v ppa2_test.py::test_calc_functions'''
+            }
+        }
+        stage('Tests Phase using dummy, mock Test Doubles') {
+            agent {
+                docker {
+                    image 'pcp1976/pytest-3.7'
+                }
+            }
+            steps {
+                sh 'python -m pip install --upgrade pip'
+                sh 'pip install sqlalchemy'
+                sh 'pip install pymysql'
+                sh '''pytest -v ppa2_test.py::test_get_functions'''
             }
         }
     }
