@@ -24,6 +24,7 @@ pipeline {
                 sh 'python -m pip install --upgrade pip'
                 sh 'pip install sqlalchemy'
                 sh 'pip install pymysql'
+                sh 'pip install flask'
                 sh '''pytest -v ppa2_test.py -k test_calc_functions'''
             }
         }
