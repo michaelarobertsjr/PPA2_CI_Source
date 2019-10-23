@@ -185,13 +185,14 @@ def start(conn):
 if __name__ == '__main__':
     #Database Connection
     initial_conn = connect_db()
+    initial_conn.execute('CREATE DATABASE IF NOT EXISTS ppa2_values')
     initial_conn.execute('CREATE TABLE IF NOT EXISTS bmi(input_height VARCHAR(10), input_weight INT, output_stats VARCHAR(50), time_run datetime)')
     initial_conn.execute('CREATE TABLE IF NOT EXISTS distance(input_x1 INT, input_y1 INT, input_x2 INT, input_y2 INT, output_distance VARCHAR(50), time_run datetime)')
 
     #Web Interface
     reload(ppa2web)
     web_server = sp.Popen('ppa2web.py', shell=True)
-    
+
     try:
         #Database Connection
         a = initial_conn.execute('SELECT input_height, input_weight, output_stats, timestamp FROM bmi').fetchall()
